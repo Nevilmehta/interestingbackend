@@ -1,4 +1,4 @@
-README here is not for how to execute the project , but it's only the documentation i followed to learn such things while i was learning!!🙅‍♂️🙅‍♂️🙅‍♀️🙅‍♀️
+README here is not for how to execute the project , but it's only the documentation i followed and mark points while i was learning!!🙅‍♂️🙅‍♂️🙅‍♀️🙅‍♀️
 
 🧠 PHASE 1: Strong Backend Foundations (You may already know parts)
 

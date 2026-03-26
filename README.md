@@ -1,72 +1,94 @@
 # LinkedIn-Style Job Platform Backend
 
-A backend system for managing users, authentication, and profile-related features in a job platform similar to LinkedIn.
-
-This project focuses on **user management, authentication flows, and API design**, representing a production-style backend for a user-centric application.
+A production-style backend system for managing users, authentication, and profile workflows, built with FastAPI and designed with scalability, security, and real-world backend patterns in mind.
 
 ---
 
 ## 🧠 Overview
 
-This backend provides APIs for:
+This project simulates the backend of a LinkedIn-style platform, focusing on:
 
-- user account management
-- authentication and authorization
-- profile updates
-- avatar uploads
-- admin-level monitoring
+- user lifecycle management
+- secure authentication and authorization
+- scalable API design
+- real-world backend concerns like rate limiting, async processing, and file storage
 
-It demonstrates how real-world applications handle **user lifecycle, security, and API design**.
+It goes beyond basic CRUD by implementing **production-grade backend features**.
 
 ---
 
 ## ⚙️ Core Features
 
 ### 👤 User Management
-- Create, read, update, and delete users
-- Fetch current logged-in user (`/users/me`)
-- Pagination-ready user listing
-- Soft-delete support (optional design)
+- Full CRUD for users
+- Fetch current authenticated user (`/users/me`)
+- Pagination and filtering for user listing
+- Ownership checks (users can only modify their own data)
 
 ---
 
-### 🔐 Authentication System
-- JWT-based authentication
-- Access + refresh token flow
-- Secure login/logout system
-
-**Flow:**
-1. Login → receive access + refresh tokens  
-2. Use access token for API requests  
-3. Refresh token when expired  
-4. Logout → invalidate session  
+### 🔐 Authentication & Security
+- JWT-based authentication (access + refresh tokens)
+- Secure password hashing (bcrypt)
+- Token refresh mechanism
+- Logout with token invalidation
+- Role-based access control (RBAC)
 
 ---
 
-### 🧾 Signup System
-- Dedicated signup endpoint
-- Validates user data before creation
-- Secure password handling (bcrypt)
+### 🛡️ Role-Based Access Control (RBAC)
+- Role-based permissions (user, admin)
+- Protected admin endpoints
+- Access control enforced at API/service level
 
 ---
 
-### 🖼️ Avatar Upload
-- Upload profile image
-- Attach avatar to user profile
-- File handling through API
+### ⚡ Rate Limiting (Custom Logic)
+- Redis-backed rate limiting
+- User-based rate limiting using JWT identity
+- IP-based fallback when unauthenticated
+- Prevents abuse and API overuse
+
+---
+
+### 🖼️ File Uploads (S3 Integration)
+- Avatar upload system
+- Cloud storage using S3-compatible service
+- Scalable and production-ready file handling
+
+---
+
+### 🔄 Async Background Tasks
+- Celery-based background processing
+- Redis as message broker
+- Retry support for failed tasks
+- Designed for:
+  - email sending
+  - async processing workflows
+
+---
+
+### 📄 Pagination & Filtering
+- Efficient pagination for large datasets
+- Query-based filtering
+- Optimized API responses
+
+---
+
+### 🔒 Ownership Enforcement
+- Users can only update/delete their own data
+- Prevents unauthorized access to other users' resources
 
 ---
 
 ### 🛠️ Admin Features
 - Admin dashboard endpoint
-- Central monitoring capability
-- Foundation for role-based access control
+- Role-protected access
+- Foundation for monitoring and management tools
 
 ---
 
 ## 🏗️ Architecture
-
-
 Client
 ↓
 FastAPI (API Layer)
@@ -78,7 +100,8 @@ Repositories (Database Layer)
 PostgreSQL
 
 
----
+Async Layer:
+FastAPI → Redis (Queue) → Celery Worker → Background Tasks
 
 ## 🧰 Tech Stack
 
@@ -86,56 +109,20 @@ PostgreSQL
 - **Database**: PostgreSQL
 - **ORM**: SQLAlchemy
 - **Authentication**: JWT (Access + Refresh Tokens)
-- **Security**: Password hashing (bcrypt)
+- **Security**: bcrypt password hashing
+- **Caching / Rate Limiting**: Redis
+- **Async Processing**: Celery
+- **File Storage**: AWS S3 (or S3-compatible)
 - **Validation**: Pydantic
 - **Architecture**: Layered (API → Services → Repositories)
 
----
-
-## 📡 API Endpoints
-
-### Root
-- `GET /`
-
----
-
-### Users
-
-- `GET /users/me` → Get current user  
-- `POST /users/` → Create user  
-- `GET /users/` → List users  
-- `GET /users/{user_id}` → Get user by ID  
-- `PUT /users/{user_id}` → Update user  
-- `DELETE /users/{user_id}` → Delete user  
-- `POST /users/{user_id}/avatar` → Upload avatar  
-- `POST /users/signup` → Signup  
-
----
-
-### Authentication
-
-- `POST /auth/login` → Login  
-- `POST /auth/refresh` → Refresh token  
-- `POST /auth/logout` → Logout  
-
----
-
-### Admin
-
-- `GET /admin/dashboard` → Admin dashboard  
-
----
-
-## 🔐 Authentication Flow
-
-
 Login → Access Token + Refresh Token
 
-API Requests:
+API Request:
 Authorization: Bearer <access_token>
 
 Token Expiry:
-Use refresh token → get new access token
+Use refresh token → generate new access token
 
 Logout:
 Invalidate refresh token
@@ -143,24 +130,18 @@ Invalidate refresh token
 
 ---
 
-## 📦 Example Request (Signup)
+## 🧪 Key Backend Concepts Demonstrated
 
-```json
-{
-  "email": "user@example.com",
-  "password": "securepassword",
-  "name": "John Doe"
-}
+- REST API design with FastAPI
+- JWT authentication and token lifecycle management
+- Role-based access control (RBAC)
+- Redis-based rate limiting (user + IP fallback)
+- Background job processing using Celery
+- Retry-based fault tolerance
+- File uploads using cloud storage (S3)
+- Pagination and filtering strategies
+- Ownership and authorization checks
+- Layered backend architecture
 
-🧪 Key Concepts Demonstrated
-REST API design
-JWT authentication (access + refresh tokens)
-Secure password handling
-Layered backend architecture
-Dependency injection (FastAPI Depends)
-File upload handling (avatars)
-Request/response validation (Pydantic)
-Role-based system foundation (admin endpoints)
-
-Run:
-uvicorn main:app --reload
+---
+Run: uvicorn main:app --reload

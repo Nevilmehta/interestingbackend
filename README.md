@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # LinkedIn-Style Job Platform Backend
-=======
-README here is not for how to execute the project , but it's only the documentation i followed and mark points while i was learning!!🙅‍♂️🙅‍♂️🙅‍♀️🙅‍♀️
->>>>>>> 20223a4e99f38b4e9229ffdac0ecb28d5ae283e0
 
 A backend system for managing users, authentication, and profile-related features in a job platform similar to LinkedIn.
 
